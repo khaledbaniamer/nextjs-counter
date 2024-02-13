@@ -1,29 +1,34 @@
-'use client';
-import { useState } from "react"
+"use client";
+import { useReducer, useState } from "react";
 import Button from "./button";
+import { counterReducer } from "@/hooks/counterReducer";
 
-type CounterProps = {
+type CounterProps = {};
 
-}
+const Counter = (props: CounterProps) => {
+  const [state, dispatch] = useReducer(counterReducer, { count: 0 });
 
-const Counter =(props:CounterProps)=>{
-    const [counter , setCounter] = useState<number>(0)
+  // Event handler for incrementing and decrementing the counter
+  // Separating the dispatch call into a dedicated function like this allows for better
+  // organization and readability of the component code.
 
-    return(
-        <div className="flex">
-            <Button 
-            className={"bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 m-1 rounded"} 
-            label="+"
-            onClick={()=>setCounter((prev)=>prev +1)}
-            />
-            <div className="text-gray-700  bg-gray-400 px-4 py-2 m-1 rounded">{counter}</div>
-            <Button 
-            className={"bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 m-1 rounded"} 
-            label="-"
-            onClick={()=>setCounter((prev)=>prev -1)}
-            />
-        </div>
-    )
-}
+  const increment = () => {
+    dispatch({ type: "INCREMENT" });
+  };
+
+  const decrement = () => {
+    dispatch({ type: "DECREMENT" });
+  };
+
+  return (
+    <div className="flex space-x-4">
+      <Button label="+" onClick={increment} />
+      <div className="text-gray-700  bg-gray-400 px-4 py-2 m-1 rounded">
+        {state.count}
+      </div>
+      <Button label="-" onClick={decrement} />
+    </div>
+  );
+};
 
 export default Counter;
